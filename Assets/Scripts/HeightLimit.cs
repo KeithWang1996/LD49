@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HeightLimit : MonoBehaviour
 {
+    public Image victoryMenu;
+
     SpriteRenderer spriteRenderer;
     int catCounter = 0;
     bool isBeingTouched = true;
@@ -38,12 +41,14 @@ public class HeightLimit : MonoBehaviour
             {
                 Victory();
                 isGameOver = true;
+                GetComponent<AudioSource>().Play();
             }
         }
     }
 
     void Victory()
     {
+        victoryMenu.gameObject.SetActive(true);
         Debug.Log("Victory!");
     }
 

@@ -9,14 +9,21 @@ public class CatMovement : MonoBehaviour
     public float moveInverval;
 
     public float moveTimer = 0f;
+
+    public AudioClip meow1;
+    public AudioClip meow2;
+    public AudioClip meow3;
     Rigidbody2D rigidBody;
     Animator animator;
     bool hasCurrentFish = false;
     Transform currentFish;
+    AudioSource audioSource;
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        moveTimer = moveInverval;
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -76,6 +83,23 @@ public class CatMovement : MonoBehaviour
                 diff.Normalize();
                 rigidBody.AddForce(diff * moveForce, ForceMode2D.Impulse);
                 moveTimer = 0f;
+
+                int randomInt = Random.Range(0, 2);
+                switch(randomInt)
+                {
+                    case 0:
+                        audioSource.clip = meow1;
+                        break;
+                    case 1:
+                        audioSource.clip = meow2;
+                        break;
+                    case 2:
+                        audioSource.clip = meow3;
+                        break;
+                    default:
+                        break;
+                }
+                audioSource.Play();
             }
             else
             {
