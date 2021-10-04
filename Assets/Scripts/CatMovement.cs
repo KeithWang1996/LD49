@@ -8,9 +8,11 @@ public class CatMovement : MonoBehaviour
     public float moveForce;
     public float moveInverval;
 
-    float moveTimer = 0f;
+    public float moveTimer = 0f;
     Rigidbody2D rigidBody;
     Animator animator;
+    bool hasCurrentFish = false;
+    Transform currentFish;
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
@@ -34,6 +36,21 @@ public class CatMovement : MonoBehaviour
         {
             sr.flipX = false;
         }
+
+        if(hasCurrentFish)
+        {
+            if (moveTimer >= moveInverval)
+            {
+                Vector2 diff = currentFish.position - transform.position;
+                diff.Normalize();
+                rigidBody.AddForce(diff * moveForce, ForceMode2D.Impulse);
+                moveTimer = 0f;
+            }
+            else
+            {
+                moveTimer += Time.deltaTime;
+            }
+        }
     }
 
     void Walk(float horizontalInput)
@@ -45,9 +62,10 @@ public class CatMovement : MonoBehaviour
     private void OnTriggerStay2D(Collider2D collision)
     {
         GameObject otherObject = collision.gameObject;
-        if(otherObject.tag == "Fish")
+        if (otherObject.tag == "Fish")
         {
-            if(moveTimer >= moveInverval)
+            animator.SetBool("IsHappy", true);
+            if (moveTimer >= moveInverval)
             {
                 Vector2 diff = otherObject.transform.position - transform.position;
                 diff.Normalize();
@@ -67,6 +85,8 @@ public class CatMovement : MonoBehaviour
         if (otherObject.tag == "Fish")
         {
             animator.SetBool("IsHappy", true);
+            hasCurrentFish = true;
+            currentFish = otherObject.transform;
         }
     }
 
@@ -76,6 +96,7 @@ public class CatMovement : MonoBehaviour
         if (otherObject.tag == "Fish")
         {
             animator.SetBool("IsHappy", false);
+            hasCurrentFish = false;
         }
     }
 }
