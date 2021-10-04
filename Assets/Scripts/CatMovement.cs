@@ -37,6 +37,11 @@ public class CatMovement : MonoBehaviour
             sr.flipX = false;
         }
 
+        if(currentFish == null)
+        {
+            hasCurrentFish = false;
+        }
+
         if(hasCurrentFish)
         {
             if (moveTimer >= moveInverval)
